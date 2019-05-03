@@ -10,7 +10,6 @@ export function createElement(
   props: any,
   _root: HTMLCanvasElement,
 ) {
-  // console.log('createElement', type, props, root)
   switch (type) {
     case 'circ': {
       return new Circ(props)
@@ -18,7 +17,7 @@ export function createElement(
     case 'pixel': {
       return new Pixel(props)
     }
-    case 'rect': {
+    case 'rectangle': {
       return new Rect(props)
     }
     case 'root': {
@@ -26,7 +25,7 @@ export function createElement(
     }
     // Ignore all children without a `type` property (functions, nulls, etc)
     default:
-      console.warn(`Pixel8: unsupported child of type '${type}'`)
-      return
+      break
   }
+  throw new TypeError(`Pixel8: unsupported child of type '${type}'`)
 }

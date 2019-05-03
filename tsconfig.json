@@ -1,13 +1,31 @@
 {
-    "include": [
-        "./src/*"
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "es2017"
     ],
-    "compilerOptions": {
-        "lib": [
-            "dom",
-            "es2015"
-        ],
-        "jsx": "react",
-        "downlevelIteration": true
-    }
+    "jsx": "preserve",
+    "downlevelIteration": true,
+    "target": "es5",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": false,
+    "noEmit": true,
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "dist"
+  }
 }

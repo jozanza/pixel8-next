@@ -11,6 +11,7 @@ export function compileShader(
   source: string,
 ) {
   const shader = gl.createShader(type)
+  if (!shader) throw new Error('Could not create shader')
   gl.shaderSource(shader, source)
   gl.compileShader(shader)
   const didCompile = gl.getShaderParameter(shader, gl.COMPILE_STATUS)
@@ -435,6 +436,7 @@ export function createBuffer(
   usage: GLenum = gl.STATIC_DRAW,
 ) {
   const buffer = gl.createBuffer()
+  if (!buffer) throw new Error('Could not create buffer')
   gl.bindBuffer(target, buffer)
   gl.bufferData(target, data, usage)
   gl.bindBuffer(target, null)
@@ -485,6 +487,7 @@ export function createTexture(
 ) {
   const target = gl.TEXTURE_2D
   const texture = gl.createTexture()
+  if (!texture) throw new Error('Could not create texture')
   gl.bindTexture(target, texture)
   gl.texParameteri(target, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
   gl.texParameteri(target, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
@@ -592,7 +595,7 @@ export class WebGLRenderer {
     if (!this.textures.has(sprite)) {
       this.textures.set(sprite, createTexture(gl, sprite))
     }
-    const texture = this.textures.get(sprite)
+    const texture = this.textures.get(sprite)!
     /* prettier-ignore */
     setUniformMatrix(gl, program, 'u_matrix', '3fv', [
       dw, 0, 0,

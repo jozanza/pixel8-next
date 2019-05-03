@@ -1,25 +1,19 @@
 import { ReactElement } from 'react'
-import Reconciler, { Fiber, HostConfig } from 'react-reconciler'
+import Reconciler, { HostConfig } from 'react-reconciler'
 import {
   unstable_scheduleCallback as scheduleDeferredCallback,
   unstable_cancelCallback as cancelDeferredCallback,
 } from 'scheduler'
-import { createElement, Element as PixelElement } from './elements'
+import { createElement } from './elements'
 
-declare namespace Pixel8 {
-  export type Type = string
-  export type Props = {}
-  export type HostContext = {}
-  export type Container = HTMLCanvasElement
-  export type UpdatePayload = {}
-}
+type Pixel8Element = ReturnType<typeof createElement>
 
 type Pixel8HostConfig = HostConfig<
   Pixel8.Type, // Type
   Pixel8.Props, // Props
   Pixel8.Container, // Container
-  PixelElement, // Instance
-  PixelElement, // TextInstance
+  Pixel8Element, // Instance
+  Pixel8Element, // TextInstance
   any, // HydratableInstance
   any, // PublicInstance
   Pixel8.HostContext, // HostContext
@@ -154,7 +148,7 @@ const hostConfig: Pixel8HostConfig = {
     _internalInstanceHandle,
   ) {
     // console.log('commitUpdate', newProps)
-    instance.applyProps(newProps)
+    instance.applyProps(newProps as any)
   },
 
   // Here we perform the actual dom update on the textNode.
@@ -270,7 +264,7 @@ const hostConfig: Pixel8HostConfig = {
     // console.log('commitMount!!!!!!!!!')
     // Call root.draw() immediately before timer kicks in
     instance.update()
-    instance.draw()
+    ;(instance.draw as any)()
   },
 
   // This is called when we have made a in-memory render tree of all the views.
@@ -294,34 +288,33 @@ const hostConfig: Pixel8HostConfig = {
 const Pixl8r = Reconciler(hostConfig)
 
 // Map top-level HTMLCanvasElement to its Fiber
-const CONTAINERS = new Map<HTMLCanvasElement, Fiber>()
+const CONTAINERS = new Map<HTMLCanvasElement, Reconciler.FiberRoot>()
 
 // Renders the top-level Pixel8 Element into its root DOM Element
 export function render(
   element: ReactElement,
   rootElement: HTMLCanvasElement,
-  callback?: () => void,
+  callback?: () => void | null,
 ) {
   if (!CONTAINERS.has(rootElement)) {
-    // console.log('CREATE CONTAINER')
-    const isAsync = false
-    const container: Fiber = Pixl8r.createContainer(rootElement, isAsync)
+    const isConcurrent = false
+    const hydrate = false
+    const container = Pixl8r.createContainer(rootElement, isConcurrent, hydrate)
     CONTAINERS.set(rootElement, container)
   }
   const parentComponent = null
-  const container = CONTAINERS.get(rootElement)
-  Pixl8r.updateContainer(element, container, parentComponent, callback)
-  return Pixl8r.getPublicRootInstance(container) as PixelElement
+  const container = CONTAINERS.get(rootElement)!
+  Pixl8r.updateContainer(element, container, parentComponent, callback as any)
+  return Pixl8r.getPublicRootInstance(container) as Pixel8Element
 }
 
 // Unmounts the top-level Pixel8 Element
 export function unmountComponentAtNode(element: HTMLCanvasElement) {
-  // console.log('UNMOUNT')
   const container = CONTAINERS.get(element)
   if (!container) return
-  const root: PixelElement = Pixl8r.getPublicRootInstance(container)
+  const root: Pixel8Element = Pixl8r.getPublicRootInstance(container)
   root.destroy()
-  Pixl8r.updateContainer(null, container, null, () =>
-    CONTAINERS.delete(element),
-  )
+  Pixl8r.updateContainer(null, container, null, () => {
+    CONTAINERS.delete(element)
+  })
 }

@@ -1,25 +1,34 @@
 {
-  "name": "pixel8-next",
-  "version": "1.0.0",
+  "name": "pixel8",
+  "version": "2.0.0-alpha.0",
   "description": "TypeScript, WebGL, and other updates!",
   "keywords": [],
-  "main": "src/index.tsx",
+  "main": "dist/pixel8.min.js",
+  "types": "dist/pixel8.d.ts",
+  "files": [
+    "dist"
+  ],
   "dependencies": {
-    "@types/react-reconciler": "0.18.0",
+    "bili": "^4.7.3",
     "react": "16.8.4",
+    "react-docgen-typescript": "^1.12.4",
     "react-dom": "16.8.4",
     "react-reconciler": "0.21.0-alpha.0",
-    "react-scripts": "2.1.3",
+    "rollup-plugin-typescript2": "^0.21.0",
     "scheduler": "0.14.0"
   },
   "devDependencies": {
+    "@types/react-reconciler": "0.18.0",
+    "@types/scheduler": "^0.12.1",
     "@types/react": "16.8.8",
     "@types/react-dom": "16.8.2",
-    "typescript": "3.3.3"
+    "react-scripts": "^3.0.0",
+    "typescript": "^3.3.3"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npx bili --format esm-min --format cjs-min src/pixel8.tsx",
+    "postbuild": "rm dist/index.d.ts",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },

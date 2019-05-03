@@ -8,12 +8,20 @@ export type Props = {
   fill: string
   x: number
   y: number
+  onTick?(): void
+  onTouchStart?(e: TouchEvent): void
+  onTouchMove?(e: TouchEvent): void
+  onTouchEnd?(e: TouchEvent): void
+  onMouseDown?(e: MouseEvent): void
+  onMouseMove?(e: MouseEvent): void
+  onMouseUp?(e: MouseEvent): void
+  onClick?(e: MouseEvent): void
 }
 
 export default class Pixel extends Element<Type, Props> {
-  private color: number
-  private alpha: number
-  private source: TexImageSource
+  private color!: number
+  private alpha!: number
+  private source!: TexImageSource
   private cache: Map<string, TexImageSource>
   constructor(props: Props) {
     super('pixel', props)
@@ -30,7 +38,7 @@ export default class Pixel extends Element<Type, Props> {
     if (!this.cache.has(key)) {
       this.cache.set(key, createImageDataRectangle(1, 1, this.color))
     }
-    this.source = this.cache.get(key)
+    this.source = this.cache.get(key)!
   }
   applyProps(nextProps: Props) {
     const didFillChange = this.props.fill !== nextProps.fill

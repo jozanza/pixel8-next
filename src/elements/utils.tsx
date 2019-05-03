@@ -90,9 +90,9 @@ export function hexToUint32(hex: string) {
 
 /** Converts an RGB/A string to ABGR uint32 */
 export function rgbaToUint32(rgba: string) {
-  const [red, green, blue, alpha = 1] = rgba
-    .match(/([0-9]*[.])?[0-9]+/g)
-    .map(Number)
+  const matches = rgba.match(/([0-9]*[.])?[0-9]+/g)
+  if (!matches) throw new Error(`Invalid RGB or RGBA color string: "${rgba}"`)
+  const [red, green, blue, alpha = 1] = matches.map(Number)
   const a = (alpha * 255) & 0xff
   const b = blue & 0xff
   const g = green & 0xff

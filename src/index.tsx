@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState } from 'react'
 import { render } from 'react-dom'
 import './styles.css'
 import Stage from './components/Stage'
@@ -82,38 +82,23 @@ function TheStageSection() {
       </p>
       <div className="preview">
         <Stage background="#000" />
-        <Stage background="#eee" gridSize={8} gridColor="#f5f5f5" />
-        <Stage
-          background="#ddd"
-          gridType="dotted"
-          gridSize={8}
-          gridColor="#ccc"
-        />
-        <Stage
-          width={16}
-          height={16}
-          scale={8}
-          background="pink"
-          gridSize={1}
-          gridColor="#fff"
-        />
-        <Stage
-          width={16}
-          height={16}
-          scale={8}
-          background="#8959a8"
-          gridType="dotted"
-          gridSize={1}
-          gridColor="#fff"
-        />
+        <Stage background="#eee" />
+        <Stage background="#ddd" />
+        <Stage width={16} height={16} scale={8} background="pink" />
+        <Stage width={16} height={16} scale={8} background="#8959a8" />
       </div>
       {/* prettier-ignore */}
       <pre><code>
       TODO:{'\n'}
       -----{'\n'}
+      - [ ] pass event object{'\n'}
+      - [ ] events on {'<root>\n'}
+      - [X] onClick{'\n'}
+      - [ ] onMouseDown/Move/Up{'\n'}
+      - [ ] onTouchStart/Move/End{'\n'}
+      - [ ] onTick for all elements{'\n'}
+      - [X] ref (to get external access to the underlying canvas, etc){'\n'}
       - [ ] background image tiling{'\n'}
-      - [ ] interactive events onClick{'\n'}
-      - [ ] ref (to get external access to the underlying canvas, etc)
       </code></pre>
     </div>
   )
@@ -155,14 +140,7 @@ function PixelsSection() {
         {/*
          * 1-bit smiley
          */}
-        <Stage
-          width={8}
-          height={8}
-          scale={8}
-          fps={0}
-          gridColor="#f4f4f4"
-          background="#fff"
-        >
+        <Stage width={8} height={8} scale={8} fps={0} background="#fff">
           <pixel x={2} y={0} fill="#000" />
           <pixel x={5} y={0} fill="#000" />
           <pixel x={2} y={1} fill="#000" />
@@ -181,14 +159,7 @@ function PixelsSection() {
         {/*
          * 1-bit heart
          */}
-        <Stage
-          width={8}
-          height={8}
-          scale={8}
-          fps={0}
-          gridColor="#f4f4f4"
-          background="#fff"
-        >
+        <Stage width={8} height={8} scale={8} fps={0} background="#fff">
           <pixel x={1} y={1} fill="#000" />
           <pixel x={2} y={1} fill="#000" />
           <pixel x={5} y={1} fill="#000" />
@@ -217,14 +188,7 @@ function PixelsSection() {
         {/*
          * 1-bit sword
          */}
-        <Stage
-          width={8}
-          height={8}
-          scale={8}
-          fps={0}
-          gridColor="#f4f4f4"
-          background="#fff"
-        >
+        <Stage width={8} height={8} scale={8} fps={0} background="#fff">
           <pixel x={6} y={0} fill="#000" />
           <pixel x={7} y={0} fill="#000" />
           <pixel x={5} y={1} fill="#000" />
@@ -256,7 +220,6 @@ function PixelsSection() {
           height={8}
           scale={8}
           fps={10}
-          gridColor="#f4f4f4"
           background="#fff"
           onTick={() => {
             setState({ to: (state.to + 1) % (pixels.length + 1) })
@@ -279,103 +242,103 @@ function RectanglesSection() {
         <code className="no-bg">{`no import required =)`}</code>
       </p>
       <h4>
-        <code>{'<rect>'}</code>
+        <code>{'<rectangle>'}</code>
       </h4>
       <p>Everybody {'<3'}s a good ole rectangle-bot:</p>
       <div className="preview">
         <Stage
+          ref={r => {
+            console.log('REF', r)
+          }}
           width={64}
           height={64}
           scale={8}
-          fps={0}
-          gridColor="#f4f4f4"
+          fps={1}
           background="#fff"
         >
-          <rect
+          <rectangle
             x={0}
             y={0}
             height={8}
             width={32}
             fill="rgba(255, 119, 168, 1)"
-            borderRadius={0}
+            onTouchStart={() => console.log('touchstart')}
+            onTouchMove={() => console.log('touchmove')}
+            onTouchEnd={() => console.log('touchend')}
+            onMouseDown={() => console.log('mousedown')}
+            onMouseMove={() => console.log('mousemove')}
+            onMouseUp={() => console.log('mouseup')}
+            onClick={() => console.log('click')}
+            onTick={() => console.log('tick')}
           />
-          <rect
+          <rectangle
             x={48}
             y={10}
             height={8}
             width={4}
             fill="rgba(131, 118, 156, 1)"
-            borderRadius={0}
           />
           {/* robot */}
-          <rect
+          <rectangle
             x={64 / 2 - 8}
             y={64 / 2 - 8}
             height={16}
             width={16}
             fill="rgba(194, 195, 199, 1)"
-            borderRadius={1}
           >
             {/* eyes */}
-            <rect
+            <rectangle
               x={2}
               y={4}
               height={6}
               width={4}
               fill="rgba(255, 0, 77, 1)"
-              borderRadius={1}
             />
-            <rect
+            <rectangle
               x={10}
               y={4}
               height={6}
               width={4}
               fill="rgba(255, 0, 77, 1)"
-              borderRadius={1}
             />
             {/* "ears" */}
-            <rect
+            <rectangle
               x={-2}
               y={4}
               height={8}
               width={2}
               fill="rgba(95, 87, 79, 1)"
-              borderRadius={0}
             />
-            <rect
+            <rectangle
               x={-2}
               y={-2}
               height={8}
               width={1}
               fill="rgba(194, 1955, 199, 1)"
-              borderRadius={0}
             />
-            <rect
+            <rectangle
               x={16}
               y={4}
               height={8}
               width={2}
               fill="rgba(95, 87, 79, 1)"
-              borderRadius={0}
             />
-            <rect
+            <rectangle
               x={17}
               y={-2}
               height={8}
               width={1}
               fill="rgba(194, 1955, 199, 1)"
-              borderRadius={0}
             />
             {/* mouth */}
-            <rect
+            <rectangle
               x={2}
               y={12}
               height={1}
               width={12}
               fill="rgba(95, 87, 79, 1)"
-              borderRadius={0}
             />
-          </rect>
+          </rectangle>
         </Stage>
       </div>
       {/* prettier-ignore */}
@@ -401,14 +364,7 @@ function CirclesSection() {
       </h4>
       <p>Circle...bear...Why not? ¯\_(ツ)_/¯</p>
       <div className="preview">
-        <Stage
-          width={64}
-          height={64}
-          scale={8}
-          fps={0}
-          gridColor="#f4f4f4"
-          background="#fff"
-        >
+        <Stage width={64} height={64} scale={8} fps={0} background="#fff">
           <circ x={0} y={0} radius={4} fill="rgba(29, 43, 83, 1)" />
           <circ
             x={64 / 2 - 8}
@@ -496,7 +452,7 @@ function AnimationsSection() {
     alternate: true,
     ease: 'linear',
   })
-  const animate = () => {
+  const animateAll = () => {
     animateX()
     animateY()
     animateFill()
@@ -509,16 +465,22 @@ function AnimationsSection() {
       </p>
       <p>Animating stuff is fairly straightforward with React Hooks:</p>
       <div className="preview">
-        <Stage
-          width={128}
-          height={128}
-          scale={4}
-          fps={60}
-          background="#fff"
-          onTick={animate}
-        >
-          <rect fill="rgba(0, 0, 0, .05)" x={0} y={64} height={1} width={128} />
-          <rect fill={fill} x={x * 119} y={y + 60} height={9} width={9} />
+        <Stage width={128} height={128} scale={4} fps={60} background="#fff">
+          <rectangle
+            fill="rgba(0, 0, 0, .05)"
+            x={0}
+            y={64}
+            height={1}
+            width={128}
+          />
+          <rectangle
+            fill={fill}
+            x={x * 119}
+            y={y + 60}
+            height={9}
+            width={9}
+            onTick={animateAll}
+          />
         </Stage>
       </div>
     </div>

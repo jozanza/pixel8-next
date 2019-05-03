@@ -1,4 +1,10 @@
-import React, { ReactNode, useEffect, useRef } from 'react'
+import React, {
+  forwardRef,
+  ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from 'react'
 import * as Pixel8 from '../renderer'
 
 type Props = {
@@ -11,7 +17,7 @@ type Props = {
   onTick?(): void
 }
 
-export default function Stage(props: Props) {
+export default forwardRef(function Stage(props: Props, ref) {
   const {
     background = 'transparent',
     fps = 30,
@@ -19,10 +25,17 @@ export default function Stage(props: Props) {
     height = 128,
     scale = 1,
     children,
-    onTick,
+    ...rest
   } = props
-  // const self = useRed({})
-  const canvasEl = useRef<HTMLCanvasElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  useLayoutEffect(() => {
+    if (typeof ref === 'function') {
+      ref(canvasRef.current)
+    } else if (ref) {
+      ;(ref as any).current = canvasRef.current
+    }
+  }, [canvasRef, ref])
+  const isCanvasReady = Boolean(canvasRef.current)
   const styles: React.CSSProperties = {
     position: 'absolute',
     top: 0,
@@ -36,24 +49,31 @@ export default function Stage(props: Props) {
     height,
   }
   const canvas = (
-    <canvas ref={canvasEl} style={styles} width={width} height={height} />
+    <canvas ref={canvasRef} style={styles} width={width} height={height} />
   )
   useEffect(() => {
-    if (!canvasEl.current) return
-    const { current: c } = canvasEl
+    if (!canvasRef.current) return
+    const c = canvasRef.current
     const context = c.getContext('webgl', { antialias: false })
     const rootElem = React.createElement('root', {
       width,
       height,
+      scale,
       fps,
       context,
       children,
-      onTick,
+      ...rest,
     })
     Pixel8.render(rootElem, c)
-  }, [canvasEl.current, width, height, fps, scale, children, onTick])
-  useEffect(() => () => Pixel8.unmountComponentAtNode(canvasEl.current), [])
-  // console.log(ctx.current)
+  }, [isCanvasReady, width, height, fps, scale, children])
+  useEffect(
+    () => () => {
+      if (canvasRef.current) {
+        Pixel8.unmountComponentAtNode(canvasRef.current)
+      }
+    },
+    [],
+  )
   return (
     <div
       style={{
@@ -67,17 +87,4 @@ export default function Stage(props: Props) {
       {canvas}
     </div>
   )
-}
-
-import { Props as CircProps } from '../elements/Circ'
-import { Props as PixelProps } from '../elements/Pixel'
-// import { Props as RectProps } from '../elements/Rect'
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      circ: CircProps & { key?: string; children?: ReactNode }
-      pixel: PixelProps & { key?: string }
-      // rect: RectProps & { children?: ReactNode }
-    }
-  }
-}
+})
