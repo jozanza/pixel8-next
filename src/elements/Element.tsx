@@ -45,6 +45,7 @@ export default class Element<
       if (c === beforeChild) {
         nextChildren.add(child)
         child.parent = this
+        child.root = this.root
       }
       nextChildren.add(c)
     }
