@@ -54,6 +54,24 @@ export default class Element<
   removeChild(child: Element) {
     this.children.delete(child)
     child.parent = null
+    if (this.touchstartables) {
+      this.touchstartables.delete(child)
+    }
+    if (this.touchmoveables) {
+      this.touchmoveables.delete(child)
+    }
+    if (this.touchendables) {
+      this.touchendables.delete(child)
+    }
+    if (this.mousedownables) {
+      this.mousedownables.delete(child)
+    }
+    if (this.mousemoveables) {
+      this.mousemoveables.delete(child)
+    }
+    if (this.mouseupables) {
+      this.mouseupables.delete(child)
+    }
     if (this.clickables) {
       this.clickables.delete(child)
     }
@@ -62,6 +80,7 @@ export default class Element<
   update() {
     // Position & Size
     if (this.parent) {
+      this.root = this.root || this.parent.root
       this.x = this.props.x + this.parent.x || 0
       this.y = this.props.y + this.parent.y || 0
     } else {

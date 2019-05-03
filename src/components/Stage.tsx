@@ -15,6 +15,13 @@ type Props = {
   background?: string
   children?: ReactNode
   onTick?(): void
+  onTouchStart?(e: TouchEvent): void
+  onTouchMove?(e: TouchEvent): void
+  onTouchEnd?(e: TouchEvent): void
+  onMouseDown?(e: MouseEvent): void
+  onMouseMove?(e: MouseEvent): void
+  onMouseUp?(e: MouseEvent): void
+  onClick?(e: MouseEvent): void
 }
 
 export default forwardRef(function Stage(props: Props, ref) {
