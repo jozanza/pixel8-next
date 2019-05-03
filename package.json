@@ -1,6 +1,6 @@
 {
   "name": "pixel8",
-  "version": "2.0.0-alpha.2",
+  "version": "2.0.0-alpha.9",
   "description": "TypeScript, WebGL, and other updates!",
   "keywords": [],
   "main": "dist/pixel8.min.js",
@@ -9,11 +9,9 @@
     "dist"
   ],
   "dependencies": {
-    "bili": "^4.7.3",
-    "react-docgen-typescript": "^1.12.4",
     "react-reconciler": "0.21.0-alpha.0",
     "rollup-plugin-typescript2": "^0.21.0",
-    "scheduler": "0.14.0"
+    "scheduler": "0.14.0-alpha.0"
   },
   "peerDependencies": {
     "react": ">=16.8",
@@ -24,6 +22,8 @@
     "@types/scheduler": "^0.12.1",
     "@types/react": "16.8.8",
     "@types/react-dom": "16.8.2",
+    "bili": "^4.7.3",
+    "react-docgen-typescript": "^1.12.4",
     "react-scripts": "^3.0.0",
     "typescript": "^3.3.3"
   },

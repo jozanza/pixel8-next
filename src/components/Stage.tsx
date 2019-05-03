@@ -61,7 +61,10 @@ export default forwardRef(function Stage(props: Props, ref) {
   useEffect(() => {
     if (!canvasRef.current) return
     const c = canvasRef.current
-    const context = c.getContext('webgl', { antialias: false })
+    const context = c.getContext('webgl', {
+      antialias: false,
+      preserveDrawingBuffer: true,
+    })
     const rootElem = React.createElement('root', {
       width,
       height,
