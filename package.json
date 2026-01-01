@@ -24,7 +24,7 @@
     "@types/react-dom": "16.8.2",
     "bili": "^4.7.3",
     "react-docgen-typescript": "^1.12.4",
-    "react-scripts": "^3.0.0",
+    "react-scripts": "^5.0.1",
     "typescript": "^3.3.3"
   },
   "scripts": {
